@@ -13,11 +13,7 @@ def apply_edge_detection(frame):
     
     # Convert back to BGR for display
     edges_colored = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
-    
-    # Alternatively, you can overlay edges on original image
-    # edges_overlay = frame.copy()
-    # edges_overlay[edges > 0] = [0, 255, 255]  # Yellow color for edges
-    
+
     return edges_colored
 
 def apply_cartoon_filter(frame):
