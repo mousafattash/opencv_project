@@ -1,17 +1,7 @@
 import cv2
 import numpy as np
 
-
 def apply_edge_detection(frame):
-    """
-    Apply edge detection filter to a video frame
-    
-    Args:
-        frame (numpy.ndarray): Input video frame
-        
-    Returns:
-        numpy.ndarray: Frame with edge detection applied
-    """
     # Convert to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -31,15 +21,6 @@ def apply_edge_detection(frame):
     return edges_colored
 
 def apply_cartoon_filter(frame):
-    """
-    Apply cartoon filter to a video frame
-    
-    Args:
-        frame (numpy.ndarray): Input video frame
-        
-    Returns:
-        numpy.ndarray: Frame with cartoon effect applied
-    """
     # Convert to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -64,16 +45,6 @@ def apply_cartoon_filter(frame):
     return cartoon
 
 def apply_grayscale_quantization(frame, levels=8):
-    """
-    Apply grayscale quantization filter to a video frame
-    
-    Args:
-        frame (numpy.ndarray): Input video frame
-        levels (int): Number of gray levels (default: 8)
-        
-    Returns:
-        numpy.ndarray: Frame with grayscale quantization applied
-    """
     # Convert to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -86,15 +57,6 @@ def apply_grayscale_quantization(frame, levels=8):
     return cv2.cvtColor(quantized, cv2.COLOR_GRAY2BGR)
 
 def apply_histogram_equalization(frame):
-    """
-    Apply histogram equalization for contrast enhancement to a video frame
-    
-    Args:
-        frame (numpy.ndarray): Input video frame
-        
-    Returns:
-        numpy.ndarray: Frame with histogram equalization applied
-    """
     # Convert to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -105,16 +67,6 @@ def apply_histogram_equalization(frame):
     return cv2.cvtColor(equalized, cv2.COLOR_GRAY2BGR)
 
 def apply_soft_blur(frame, kernel_size=15):
-    """
-    Apply soft blur filter to a video frame
-    
-    Args:
-        frame (numpy.ndarray): Input video frame
-        kernel_size (int): Size of the blur kernel (default: 15)
-        
-    Returns:
-        numpy.ndarray: Frame with soft blur applied
-    """
     # Apply Gaussian blur for a soft appearance
     blurred = cv2.GaussianBlur(frame, (kernel_size, kernel_size), 0)
     
@@ -124,15 +76,6 @@ def apply_soft_blur(frame, kernel_size=15):
     return soft_glow
 
 def apply_clahe(frame):
-    """
-    Apply Contrast Limited Adaptive Histogram Equalization (CLAHE)
-    
-    Args:
-        frame (numpy.ndarray): Input video frame
-        
-    Returns:
-        numpy.ndarray: Frame with CLAHE applied
-    """
     # Convert to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -146,9 +89,6 @@ def apply_clahe(frame):
     return cv2.cvtColor(equalized, cv2.COLOR_GRAY2BGR)
 
 def display_menu():
-    """
-    Display the menu of available filter modes
-    """
     print("\n===== Video Filter Modes =====")
     print("1. Edge Detection")
     print("2. Grayscale Quantization")
