@@ -1,17 +1,149 @@
 import cv2
 import numpy as np
-import os
-import sys
 
-# Add the project root to the path to import from shared modules if needed
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import filter modes
-from modes.edge_detection import apply_edge_detection
-from modes.grayscale_quantization import apply_grayscale_quantization
-from modes.contrast_enhancement import apply_histogram_equalization
-from modes.soft_blur import apply_soft_blur
-from modes.cartoon_filter import apply_cartoon_filter
+def apply_edge_detection(frame):
+    """
+    Apply edge detection filter to a video frame
+    
+    Args:
+        frame (numpy.ndarray): Input video frame
+        
+    Returns:
+        numpy.ndarray: Frame with edge detection applied
+    """
+    # Convert to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Apply Gaussian blur to reduce noise
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    
+    # Apply Canny edge detection
+    edges = cv2.Canny(blurred, threshold1=30, threshold2=100)
+    
+    # Convert back to BGR for display
+    edges_colored = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+    
+    # Alternatively, you can overlay edges on original image
+    # edges_overlay = frame.copy()
+    # edges_overlay[edges > 0] = [0, 255, 255]  # Yellow color for edges
+    
+    return edges_colored
+
+def apply_cartoon_filter(frame):
+    """
+    Apply cartoon filter to a video frame
+    
+    Args:
+        frame (numpy.ndarray): Input video frame
+        
+    Returns:
+        numpy.ndarray: Frame with cartoon effect applied
+    """
+    # Convert to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Apply median blur to reduce noise and keep edges sharp
+    gray = cv2.medianBlur(gray, 5)
+    
+    # Detect edges using adaptive thresholding
+    edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
+                                 cv2.THRESH_BINARY, 9, 9)
+    
+    # Apply bilateral filter to reduce noise while keeping edges sharp
+    # This creates the cartoon-like effect
+    color = cv2.bilateralFilter(frame, 9, 300, 300)
+    
+    # Combine edges with color image
+    # Convert edges to 3-channel for bitwise operations
+    edges_3channel = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+    
+    # Bitwise AND operation to overlay edges on the color image
+    cartoon = cv2.bitwise_and(color, edges_3channel)
+    
+    return cartoon
+
+def apply_grayscale_quantization(frame, levels=8):
+    """
+    Apply grayscale quantization filter to a video frame
+    
+    Args:
+        frame (numpy.ndarray): Input video frame
+        levels (int): Number of gray levels (default: 8)
+        
+    Returns:
+        numpy.ndarray: Frame with grayscale quantization applied
+    """
+    # Convert to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Apply quantization
+    # Formula: quantized = (gray // (256 // levels)) * (256 // levels)
+    quantization_factor = 256 // levels
+    quantized = (gray // quantization_factor) * quantization_factor
+    
+    # Convert back to BGR for display
+    return cv2.cvtColor(quantized, cv2.COLOR_GRAY2BGR)
+
+def apply_histogram_equalization(frame):
+    """
+    Apply histogram equalization for contrast enhancement to a video frame
+    
+    Args:
+        frame (numpy.ndarray): Input video frame
+        
+    Returns:
+        numpy.ndarray: Frame with histogram equalization applied
+    """
+    # Convert to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Apply histogram equalization
+    equalized = cv2.equalizeHist(gray)
+    
+    # Convert back to BGR for display
+    return cv2.cvtColor(equalized, cv2.COLOR_GRAY2BGR)
+
+def apply_soft_blur(frame, kernel_size=15):
+    """
+    Apply soft blur filter to a video frame
+    
+    Args:
+        frame (numpy.ndarray): Input video frame
+        kernel_size (int): Size of the blur kernel (default: 15)
+        
+    Returns:
+        numpy.ndarray: Frame with soft blur applied
+    """
+    # Apply Gaussian blur for a soft appearance
+    blurred = cv2.GaussianBlur(frame, (kernel_size, kernel_size), 0)
+    
+    # For a more aesthetic soft glow effect, we can blend the original with the blurred
+    soft_glow = cv2.addWeighted(frame, 0.3, blurred, 0.7, 0)
+    
+    return soft_glow
+
+def apply_clahe(frame):
+    """
+    Apply Contrast Limited Adaptive Histogram Equalization (CLAHE)
+    
+    Args:
+        frame (numpy.ndarray): Input video frame
+        
+    Returns:
+        numpy.ndarray: Frame with CLAHE applied
+    """
+    # Convert to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Create a CLAHE object
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    
+    # Apply CLAHE
+    equalized = clahe.apply(gray)
+    
+    # Convert back to BGR for display
+    return cv2.cvtColor(equalized, cv2.COLOR_GRAY2BGR)
 
 def display_menu():
     """
