@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 def apply_edge_detection(frame):
     # Convert to grayscale
