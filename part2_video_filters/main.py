@@ -27,7 +27,6 @@ def apply_cartoon_filter(frame):
                                  cv2.THRESH_BINARY, 9, 9)
     
     # Apply bilateral filter to reduce noise while keeping edges sharp
-    # This creates the cartoon-like effect
     color = cv2.bilateralFilter(frame, 9, 300, 300)
     
     # Combine edges with color image
@@ -146,14 +145,14 @@ def main():
         # Check for key press
         key = cv2.waitKey(1) & 0xFF
         
-        # Process key press
+        
         if key == ord('q'):
             break
         elif key >= ord('0') and key <= ord('5'):
             current_mode = key - ord('0')
             print(f"Switched to mode: {current_mode}")
     
-    # Release resources
+    
     cap.release()
     cv2.destroyAllWindows()
 
